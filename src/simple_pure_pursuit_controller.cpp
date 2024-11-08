@@ -142,13 +142,13 @@ SimplePurePursuitController::calculateVelocityCommand(const geometry_msgs::msg::
     }
 
     cmd_vel.linear.x = std::min(adjusted_linear_velocity, max_linear_velocity_);
-    cmd_vel.angular.z = std::clamp(2 * angle_to_carrot, -max_angular_velocity_, max_angular_velocity_);
+    cmd_vel.angular.z = std::clamp(0.7 * angle_to_carrot, -max_angular_velocity_, max_angular_velocity_);
 
     return cmd_vel;
 }
 
 void SimplePurePursuitController::checkPlanTimeout() {
-    if (plan_received_ && (this->now() - last_plan_time_).seconds() > 1.2) {
+    if (plan_received_ && (this->now() - last_plan_time_).seconds() > 3.0) {
         RCLCPP_WARN(this->get_logger(), "Plan not received, stopping the robot.");
         publishZeroVelocity();
         plan_received_ = false;

@@ -4,7 +4,7 @@ CollisionChecker::CollisionChecker(rclcpp::Node *node, double distance_threshold
     : node_(node), distance_threshold_(distance_threshold), width_threshold_(width_threshold),
       obstacle_detected_(false) {
     scan_sub_ = node_->create_subscription<sensor_msgs::msg::LaserScan>(
-        "/scan", 10, std::bind(&CollisionChecker::scanCallback, this, std::placeholders::_1));
+        "/scan", rclcpp::QoS(rclcpp::KeepLast(10)).best_effort(), std::bind(&CollisionChecker::scanCallback, this, std::placeholders::_1));
 }
 
 bool CollisionChecker::isObstacleDetected() const { return obstacle_detected_; }
